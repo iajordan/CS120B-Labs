@@ -4,6 +4,6 @@
 * AVR ToolChain
 * SimARV
 
-##Labs
+## Labs
 * Lab 2: Intro to ARV ToolChain
 * Lab 3: Bit Manipulation
