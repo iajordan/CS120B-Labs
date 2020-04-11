@@ -19,11 +19,9 @@ DDRC = 0xFF; PORTC = 0x00;
 unsigned char tmpA;
 unsigned char gague;
 unsigned char lowFuel;
-unsigned char fasten;
 
 while(1){
     tmpA = PINA & 0x0F;
-    fasten = (((PINA & 0x70) == 0x30) << 7);
     if (tmpA >= 0x0D){
       gague = 0x3F;
       lowFuel = 0x00;
@@ -49,7 +47,7 @@ while(1){
       gague = 0x20;
       lowFuel = 0x40;
     }
-    PORTC = (gague & 0x3F) | lowFuel | fasten;
+    PORTC = (gague & 0x3F) | lowFuel ;
   }
     return 0;
 }
