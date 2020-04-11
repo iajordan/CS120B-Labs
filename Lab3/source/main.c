@@ -1,7 +1,7 @@
 /*	Author: Ivannovi Jordan
  *  Partner(s) Name:
  *	Lab Section: 28
- *	Assignment: Lab 3  Exercise 1
+ *	Assignment: Lab 3  Exercise 3
  *	Exercise Description: [optional - include for your own benefit]
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -14,26 +14,42 @@
 int main(void){
 
 DDRA = 0x00; PORTA = 0xFF;
-DDRB = 0x00; PORTB = 0xFF;
-
 DDRC = 0xFF; PORTC = 0x00;
 
-unsigned char tmpA = 0x00;
-unsigned char tmpB = 0x00;
-
-unsigned char cnt;
+unsigned char tmpA;
+unsigned char gague;
+unsigned char lowFuel;
+unsigned char fasten;
 
 while(1){
-    tmpA = PINA;
-    tmpB = PINB;
+    tmpA = PINA & 0x0F;
+    fasten = (((PINA & 0x70) == 0x30) << 7);
+    if (tmpA >= 0x0D){
+      gague = 0x3F;
+      lowFuel = 0x00;
+    }
+    else if(tmpA >= 0x0A){
+      gague = 0x3E;
+      lowFuel = 0x00;
+    }
+    else if (tmpA >= 0x07){
+      gague = 0x3C;
+      lowFuel = 0x00;
+    }
+    else if (tmpA >= 0x05){
+      gague = 0x38;
+      lowFuel = 0x00;
+    }
+    else if (tmpA >= 0x03){
+      gague = 0x30;
+      lowFuel = 0x40;
 
-    cnt = ((tmpA & 0x80)>> 7) + ((tmpA & 0x40)>> 6) + ((tmpA & 0x20)>> 5) +
-    ((tmpA & 0x10)>> 4) + ((tmpA & 0x08)>> 3) + ((tmpA & 0x04)>> 2) +
-    ((tmpA & 0x02)>> 1) + ((tmpA & 0x01)) + ((tmpB & 0x80)>> 7) +
-    ((tmpB & 0x40)>> 6) + ((tmpB & 0x20)>> 5) + ((tmpB & 0x10)>> 4) +
-    ((tmpB & 0x08)>> 3) + ((tmpB & 0x04)>> 2) + ((tmpB & 0x02)>> 1) + ((tmpB & 0x01)) ;
-
-    PORTC = cnt;
+    }
+    else{
+      gague = 0x20;
+      lowFuel = 0x40;
+    }
+    PORTC = (gague & 0x3F) | lowFuel | fasten;
   }
     return 0;
 }

@@ -14,7 +14,7 @@ const struct avr_mmcu_vcd_trace_t _mytrace[] _MMCU_ = {
     { AVR_MCU_VCD_SYMBOL("PINB"), .what = (void*)&PINB, } ,
     { AVR_MCU_VCD_SYMBOL("PINC"), .what = (void*)&PINC, } ,
 
-
+    { AVR_MCU_VCD_SYMBOL("PORTB"), .what = (void*)&PORTB, } ,
     { AVR_MCU_VCD_SYMBOL("PORTC"), .what = (void*)&PORTC, } ,
 };
 

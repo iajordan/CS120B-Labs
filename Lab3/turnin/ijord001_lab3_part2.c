@@ -1,7 +1,7 @@
 /*	Author: Ivannovi Jordan
  *  Partner(s) Name:
  *	Lab Section: 28
- *	Assignment: Lab 3  Exercise 2
+ *	Assignment: Lab 3  Exercise 3
  *	Exercise Description: [optional - include for your own benefit]
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -19,11 +19,11 @@ DDRC = 0xFF; PORTC = 0x00;
 unsigned char tmpA;
 unsigned char gague;
 unsigned char lowFuel;
-
-unsigned char cnt;
+unsigned char fasten;
 
 while(1){
     tmpA = PINA & 0x0F;
+    fasten = (((PINA & 0x70) == 0x30) << 7);
     if (tmpA >= 0x0D){
       gague = 0x3F;
       lowFuel = 0x00;
@@ -49,8 +49,7 @@ while(1){
       gague = 0x20;
       lowFuel = 0x40;
     }
-
-    PORTC = (gague & 0x3F) | lowFuel;
+    PORTC = (gague & 0x3F) | lowFuel | fasten;
   }
     return 0;
 }
