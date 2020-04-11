@@ -7,17 +7,17 @@
 #include <avr/sleep.h>
 #include "/usr/include/simavr/avr/avr_mcu_section.h"
 AVR_MCU(F_CPU,"atmega1284");
-AVR_MCU_VCD_FILE("build/results/Lab2_introToAVR_trace.vcd",1000);
+AVR_MCU_VCD_FILE("build/results/Lab2_trace.vcd",1000);
 
 const struct avr_mmcu_vcd_trace_t _mytrace[] _MMCU_ = {
     { AVR_MCU_VCD_SYMBOL("PINA"), .what = (void*)&PINA, } ,
     { AVR_MCU_VCD_SYMBOL("PINB"), .what = (void*)&PINB, } ,
     { AVR_MCU_VCD_SYMBOL("PINC"), .what = (void*)&PINC, } ,
 
-    
+
     { AVR_MCU_VCD_SYMBOL("PORTB"), .what = (void*)&PORTB, } ,
-    { AVR_MCU_VCD_SYMBOL("PORTC"), .what = (void*)&PORTC, }, 
-    { AVR_MCU_VCD_SYMBOL("PORTD"), .what = (void*)&PORTD, } 
+    { AVR_MCU_VCD_SYMBOL("PORTC"), .what = (void*)&PORTC, },
+    { AVR_MCU_VCD_SYMBOL("PORTD"), .what = (void*)&PORTD, }
 
 };
 
@@ -34,4 +34,3 @@ static int uart_putchar(char c, FILE *stream) {
 /* Setup filestream for debugging */
 FILE mystdout = FDEV_SETUP_STREAM(uart_putchar,NULL,_FDEV_SETUP_WRITE);
 /* End SimAVR section */
-

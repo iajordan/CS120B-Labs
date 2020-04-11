@@ -7,49 +7,34 @@
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
  */
-#include <avr/io.h>
-#ifdef _SIMULATE_
-#include "simAVRHeader.h"
-#endif
-int main(void){
+ #include <avr/io.h>
+ #ifdef _SIMULATE_
+ #include "simAVRHeader.h"
+ #endif
+ int main(void){
+     DDRD = 0x00; PORTD = 0xFF;
 
-DDRA = 0x00; PORTA = 0xFF;
-DDRC = 0xFF; PORTC = 0x00;
+     DDRB = 0xFE; PORTB = 0x01;
 
-unsigned char tmpA;
-unsigned char gague;
-unsigned char lowFuel;
-unsigned char fasten;
+     unsigned char weight = 0x000;
+     unsigned char airbag;
+     unsigned char tmpD;
+     unsigned char tmpB;
 
-while(1){
-    tmpA = PINA & 0x0F;
-    fasten = (((PINA & 0x70) == 0x30) << 7);
-    if (tmpA >= 0x0D){
-      gague = 0x3F;
-      lowFuel = 0x00;
-    }
-    else if(tmpA >= 0x0A){
-      gague = 0x3E;
-      lowFuel = 0x00;
-    }
-    else if (tmpA >= 0x07){
-      gague = 0x3C;
-      lowFuel = 0x00;
-    }
-    else if (tmpA >= 0x05){
-      gague = 0x38;
-      lowFuel = 0x00;
-    }
-    else if (tmpA >= 0x03){
-      gague = 0x30;
-      lowFuel = 0x40;
-
-    }
-    else{
-      gague = 0x20;
-      lowFuel = 0x40;
-    }
-    PORTC = (gague & 0x3F) | lowFuel | fasten;
-  }
-    return 0;
-}
+     while(1){
+         tmpD = PIND;
+         tmpB = PINB & 0x001;
+         weight = ((tmpD & 0x0FF) << 1) | tmpB & 0x001 ;
+         if (weight >= 70){
+             airbag= 0x02;
+         }
+         else if (weight > 5){
+             airbag = 0x04;
+         }
+         else {
+             airbag = 0x00;
+         }
+         PORTB = (airbag );
+     }
+     return 0;
+ }

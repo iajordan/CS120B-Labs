@@ -6,7 +6,7 @@
 #       Where <message> is the message to print. Must call this at the beginning of every test
 #       Example: test "PINA: 0x00 => expect PORTC: 0x01"
 #   checkResult
-#       Verify if the test passed or failed. Prints "passed." or "failed." accordingly, 
+#       Verify if the test passed or failed. Prints "passed." or "failed." accordingly,
 #       Must call this at the end of every test.
 #   expectPORTx <val>
 #       With x as the port (A,B,C,D)
@@ -15,9 +15,9 @@
 #       With x as the port or pin (A,B,C,D)
 #       The value to set the pin to (can be decimal or hexidecimal
 #       Example: setPINA 0x01
-#   printPORTx f OR printPINx f 
+#   printPORTx f OR printPINx f
 #       With x as the port or pin (A,B,C,D)
-#       With f as a format option which can be: [d] decimal, [x] hexadecmial (default), [t] binary 
+#       With f as a format option which can be: [d] decimal, [x] hexadecmial (default), [t] binary
 #       Example: printPORTC d
 #   printDDRx
 #       With x as the DDR (A,B,C,D)
@@ -25,6 +25,7 @@
 
 echo ======================================================\n
 echo Running all tests..."\n\n
+
 # Tests
 test "PINA: 0x20, PINB: 0x20, PINC: 0x20 => PORTC: 0x60"
 setPINA 0x20
@@ -40,7 +41,7 @@ setPINA 0x40
 setPINB 0x40
 setPINC 0x40
 continue 5
-expectPORTD 0xc1 
+expectPORTD 0xc1
 printPORTD
 checkResult
 
@@ -49,7 +50,7 @@ setPINA 0x80
 setPINB 0x10
 setPINC 0x10
 continue 5
-expectPORTD 0xA3 
+expectPORTD 0xA3
 printPORTD
 checkResult
 
@@ -62,12 +63,12 @@ expectPORTD 0x82
 printPORTD
 checkResult
 
-test "pina: 0x50, pinb: 0x10, pinc: 0x00 => portc: 0x60"
-setPINA 0x60
-setPINB 0x60
-setPINC 0x60
+test "pina: 0x51, pinb: 0x10, pinc: 0x00 => portc: 0xC2"
+setPINA 0x51
+setPINB 0x10
+setPINC 0x00
 continue 5
-expectPORTD 0x21
+expectPORTD 0x62
 printPORTD
 checkResult
 

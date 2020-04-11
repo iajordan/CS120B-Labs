@@ -1,4 +1,4 @@
-/*	Author: Ivannovi Jordan
+/*	Author: Ivannovi Jordan ijord001@ucr.edu
  *  Partner(s) Name:
  *	Lab Section: 28
  *	Assignment: Lab 3  Exercise 5

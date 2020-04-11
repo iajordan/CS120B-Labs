@@ -1,5 +1,5 @@
-/*	Author: Ivannovi Jordan
- *  Partner(s) Name: 
+/*	Author: Ivannovi Jordan ijord001@ucr.edu
+ *  Partner(s) Name:
  *	Lab Section: 28
  *	Assignment: Lab 2  Exercise 3
  *	Exercise Description: [optional - include for your own benefit]
@@ -14,7 +14,7 @@
 
 int main(void) {
     DDRA = 0x00; PORTA = 0xFF;
-    DDRC = 0xFF; PORTC = 0x00; 
+    DDRC = 0xFF; PORTC = 0x00;
     unsigned char cntavail = 0x00;
     unsigned char full;
     unsigned char tmpA = 0x00;
@@ -31,5 +31,3 @@ int main(void) {
     }
     return 0;
 }
-
-
