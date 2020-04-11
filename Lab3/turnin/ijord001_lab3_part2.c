@@ -1,7 +1,7 @@
 /*	Author: Ivannovi Jordan
  *  Partner(s) Name:
  *	Lab Section: 28
- *	Assignment: Lab 3  Exercise 3
+ *	Assignment: Lab 3  Exercise 2
  *	Exercise Description: [optional - include for your own benefit]
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -22,29 +22,33 @@ unsigned char lowFuel;
 
 while(1){
     tmpA = PINA & 0x0F;
-    if (tmpA >= 0x0D){
+    if (tmpA >= 13){
       gague = 0x3F;
       lowFuel = 0x00;
     }
-    else if(tmpA >= 0x0A){
+    else if(tmpA >= 10){
       gague = 0x3E;
       lowFuel = 0x00;
     }
-    else if (tmpA >= 0x07){
+    else if (tmpA >= 7){
       gague = 0x3C;
       lowFuel = 0x00;
     }
-    else if (tmpA >= 0x05){
+    else if (tmpA >= 5){
       gague = 0x38;
       lowFuel = 0x00;
     }
-    else if (tmpA >= 0x03){
+    else if (tmpA >= 3){
       gague = 0x30;
       lowFuel = 0x40;
 
     }
-    else{
+    else if(tmpA >= 1){
       gague = 0x20;
+      lowFuel = 0x40;
+    }
+    else {
+      gague = 0x00;
       lowFuel = 0x40;
     }
     PORTC = (gague & 0x3F) | lowFuel ;
