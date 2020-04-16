@@ -6,7 +6,7 @@
 #       Where <message> is the message to print. Must call this at the beginning of every test
 #       Example: test "PINA: 0x00 => expect PORTC: 0x01"
 #   checkResult
-#       Verify if the test passed or failed. Prints "passed." or "failed." accordingly, 
+#       Verify if the test passed or failed. Prints "passed." or "failed." accordingly,
 #       Must call this at the end of every test.
 #   expectPORTx <val>
 #       With x as the port (A,B,C,D)
@@ -15,9 +15,9 @@
 #       With x as the port or pin (A,B,C,D)
 #       The value to set the pin to (can be decimal or hexidecimal
 #       Example: setPINA 0x01
-#   printPORTx f OR printPINx f 
+#   printPORTx f OR printPINx f
 #       With x as the port or pin (A,B,C,D)
-#       With f as a format option which can be: [d] decimal, [x] hexadecmial (default), [t] binary 
+#       With f as a format option which can be: [d] decimal, [x] hexadecmial (default), [t] binary
 #       Example: printPORTC d
 #   printDDRx
 #       With x as the DDR (A,B,C,D)
@@ -26,19 +26,35 @@
 echo ======================================================\n
 echo Running all tests..."\n\n
 
-# Example test:
-test "PINA: 0x00, PINB: 0x00 => PORTC: 0"
-# Set inputs
+
+
+# Tests
+test "Doesnt Press button - PINA: 0x00 => PORTB: 0x01"
+set state = RELEASE
 setPINA 0x00
-setPINB 0x00
-# Continue for several ticks
-continue 2
-# Set expect values
-expectPORTC 0
-# Check pass/fail
+continue 5
+expectPORTB 0x01
 checkResult
 
-# Add tests below
+test "Press button and hold button - PINA: 0x00,0x01 => PORTB: 0x02"
+set state = RELEASE
+setPINA 0x00
+continue 5
+setPINA 0x01
+continue 5
+expectPORTB 0x02
+checkResult
+
+test "Press button and then release - PINA: 0x00, 0x01, 0x00 => PORTB: 0x01"
+set state = RELEASE
+setPINA 0x00
+continue 5
+setPINA 0x01
+continue 5
+setPINA 0x00
+continue 5
+expectPORTB 0x01
+checkResult
 
 # Report on how many tests passed/tests ran
 set $passed=$tests-$failed
