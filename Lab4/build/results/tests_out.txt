@@ -1,7 +1,7 @@
-Breakpoint 1 at 0x252: file source/main.c, line 61.
+Breakpoint 1 at 0x2b2: file source/main.c, line 86.
 Note: automatically using hardware breakpoints for read-only addresses.
 ======================================================
 Running all tests..."
 
-"Doesnt Press button - PINA: 0x00 => PORTB: 0x01"..."Press button and hold button - PINA: 0x00,0x01 => PORTB: 0x02"..."Press button and then release - PINA: 0x00, 0x01, 0x00 => PORTB: 0x01"...======================================================
+"Doesnt Press buttons - PINA: 0x00 => PORTC: 0x07"..."Presses the Increment button once - PINA: 0x01 => PORTC: 0x08"..."Presses the Increment button three times - PINA: 0x01 => PORTC: 0x09"..."Presses the Decrement button once - PINA: 0x02 => PORTC: 0x06"..."Presses the Decrement button 8 times - PINA: 0x02 => PORTC: 0x0"..."Presses the Decrement button once then Increment - PINA: 0x02 => PORTC: 0x07"..."Presses the Decrement and Increment - PINA: 0x02 => PORTC: 0x00"..."Presses wrong button - PINA: 0x04 => PORTC: 0x07"...======================================================
 Remote doesn't know how to detach

@@ -29,33 +29,83 @@ echo Running all tests..."\n\n
 
 
 # Tests
-test "Doesnt Press button - PINA: 0x00 => PORTB: 0x01"
-set state = RELEASE
+test "Doesnt Press buttons - PINA: 0x00 => PORTC: 0x07"
+set state = START
 setPINA 0x00
-continue 5
-expectPORTB 0x01
+continue 2
+expectPORTC 0x07
 checkResult
 
-test "Press button and hold button - PINA: 0x00,0x01 => PORTB: 0x02"
-set state = RELEASE
-setPINA 0x00
-continue 5
+
+
+test "Presses the Increment button once - PINA: 0x01 => PORTC: 0x08"
+set state = START
 setPINA 0x01
-continue 5
-expectPORTB 0x02
+continue 2
+expectPORTC 0x08
 checkResult
 
-test "Press button and then release - PINA: 0x00, 0x01, 0x00 => PORTB: 0x01"
-set state = RELEASE
-setPINA 0x00
-continue 5
+test "Presses the Increment button three times - PINA: 0x01 => PORTC: 0x09"
+set state = START
 setPINA 0x01
-continue 5
-setPINA 0x00
-continue 5
-expectPORTB 0x01
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x01
+continue 2
+expectPORTC 0x09
 checkResult
 
+test "Presses the Decrement button once - PINA: 0x02 => PORTC: 0x06"
+set state = START
+setPINA 0x02
+continue 2
+expectPORTC 0x06
+checkResult
+
+test "Presses the Decrement button 8 times - PINA: 0x02 => PORTC: 0x0"
+set state = START
+setPINA 0x02
+continue 2
+setPINA 0x02
+continue 2
+setPINA 0x02
+continue 2
+setPINA 0x02
+continue 2
+setPINA 0x02
+continue 2
+setPINA 0x02
+continue 2
+setPINA 0x02
+continue 2
+setPINA 0x02
+continue 2
+expectPORTC 0x00
+checkResult
+
+test "Presses the Decrement button once then Increment - PINA: 0x02 => PORTC: 0x07"
+set state = START
+setPINA 0x02
+continue 2
+setPINA 0x01
+continue 2
+expectPORTC 0x07
+checkResult
+
+test "Presses the Decrement and Increment - PINA: 0x02 => PORTC: 0x00"
+set state = START
+setPINA 0x03
+continue 2
+expectPORTC 0x00
+checkResult
+
+test "Presses wrong button - PINA: 0x04 => PORTC: 0x07"
+set state = START
+setPINA 0x04
+continue 2
+expectPORTC 0x07
+checkResult
 # Report on how many tests passed/tests ran
 set $passed=$tests-$failed
 eval "shell echo Passed %d/%d tests.\n",$passed,$tests

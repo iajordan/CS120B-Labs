@@ -1,7 +1,8 @@
+
 /*	Author: Ivannovi Jordan - ijord001@ucr.edu
  *  Partner(s) Name:
  *	Lab Section: 28
- *	Assignment: Lab 4  Exercise 1
+ *	Assignment: Lab 4  Exercise 2
  *	Exercise Description: [optional - include for your own benefit]
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -12,39 +13,64 @@
 #include "simAVRHeader.h"
 #endif
 
-enum States { START, PRESS, RELEASE} state;
+enum States { START, INIT, INC , DEC} state;
 unsigned char tmpA;
-unsigned char tmpB;
+unsigned char count;
 
 void Tick(){
 
   switch(state){
     case START:
-      state = RELEASE;
+      state = INIT;
+      count =0x07;
       break;
-    case RELEASE:
+    case INIT:
       tmpA = PINA;
-      state = (tmpA)? PRESS: RELEASE;
+      if(tmpA == 0x01){
+        state = INC;
+      }
+      else if (tmpA == 0x02){
+        state = DEC;
+      }
+      else if (tmpA == 0x03){
+        count = 0x00;
+        state = INIT;
+      }
+      else{
+        state = INIT;
+      }
       break;
-    case PRESS:
-      tmpA = PINA;
-      state = (tmpA)? PRESS: RELEASE;
+    case INC:
+      state = INIT;
       break;
+
+    case DEC:
+      state = INIT;
+      break;
+
     default:
       state = START;
       break;
   }
   switch (state){
-    case START:
-      tmpB = 0x01;
-      PORTB = tmpB;
+    case INIT:
+      PORTC = count;
       break;
-    case RELEASE:
-      PORTB = tmpB;
+
+    case INC:
+      if (count < 9){
+        count++;
+      }
+      PORTC = count;
       break;
-    case PRESS:
-      PORTB = (~tmpB & 0x03);
+
+    case DEC:
+      if (count > 0){
+        count--;
+      }
+      PORTC = count;
       break;
+
     default:
       break;
   }
@@ -52,13 +78,11 @@ void Tick(){
 
 int main(void) {
   DDRA = 0x00; PORTA = 0xFF;
-  DDRB = 0xFF; PORTB = 0x00;
+  DDRC = 0xFF; PORTC = 0x00;
 
   tmpA = PINA;
-  tmpB = 0x01;
+  count = 0x07;
   state = START;
-  while (1) {
-    Tick();
-    }
+  while (1) { Tick(); }
   return 1;
 }
