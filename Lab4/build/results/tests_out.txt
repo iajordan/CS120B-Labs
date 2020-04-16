@@ -1,0 +1,7 @@
+Breakpoint 1 at 0x252: file source/main.c, line 61.
+Note: automatically using hardware breakpoints for read-only addresses.
+======================================================
+Running all tests..."
+
+"Doesnt Press button - PINA: 0x00 => PORTB: 0x01"..."Press button and hold button - PINA: 0x00,0x01 => PORTB: 0x02"..."Press button and then release - PINA: 0x00, 0x01, 0x00 => PORTB: 0x01"...======================================================
+Remote doesn't know how to detach
