@@ -1,5 +1,5 @@
 /*	Author: sp4
- *  Partner(s) Name: 
+ *  Partner(s) Name:
  *	Lab Section:
  *	Assignment: Lab #  Exercise #
  *	Exercise Description: [optional - include for your own benefit]
@@ -13,11 +13,9 @@
 #endif
 
 int main(void) {
-    /* Insert DDR and PORT initializations */
-
-    /* Insert your solution below */
+    DDRB = 0xFF; PORTB = 0x00;
     while (1) {
-
+      PORTB = 0x0F;
     }
     return 1;
 }
