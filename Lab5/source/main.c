@@ -7,15 +7,51 @@
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
  */
+
 #include <avr/io.h>
 #ifdef _SIMULATE_
 #include "simAVRHeader.h"
 #endif
 
 int main(void) {
-    DDRB = 0xFF; PORTB = 0x00;
-    while (1) {
-      PORTB = 0x0F;
+  DDRA = 0x00; PORTA = 0xFF;
+  DDRC = 0xFF; PORTC = 0x00;
+  unsigned char gague = 0x00;
+  unsigned char lowFuel = 0x00;
+  unsigned char tmpA = 0x00;
+
+  while(1){
+      tmpA = ~PINA & 0x0F;
+      if (tmpA >= 13){
+        gague = 0x3F;
+        lowFuel = 0x00;
+      }
+      else if(tmpA >= 10){
+        gague = 0x3E;
+        lowFuel = 0x00;
+      }
+      else if (tmpA >= 7){
+        gague = 0x3C;
+        lowFuel = 0x00;
+      }
+      else if (tmpA >= 5){
+        gague = 0x38;
+        lowFuel = 0x00;
+      }
+      else if (tmpA >= 3){
+        gague = 0x30;
+        lowFuel = 0x40;
+
+      }
+      else if(tmpA >= 1){
+        gague = 0x20;
+        lowFuel = 0x40;
+      }
+      else {
+        gague = 0x00;
+        lowFuel = 0x00;
+      }
+      PORTC = (~gague & 0x3F) | lowFuel ;
     }
-    return 1;
-}
+      return 1;
+  }

@@ -1,4 +1,4 @@
-# Test file for "Lab5"
+# Test file for "Lab5Temp"
 
 
 # commands.gdb provides the following functions for ease:
@@ -26,24 +26,41 @@
 echo ======================================================\n
 echo Running all tests..."\n\n
 
-# Example test:
-test "PINA: 0x00, PINB: 0x00 => PORTC: 0"
-# Set inputs
+#test:
+test "PINA: 0x00 => PORTC: 0x00"
 setPINA 0x00
-setPINB 0x00
-# Continue for several ticks
 continue 2
-# Set expect values
-expectPORTC 0
-# Check pass/fail
+expectPORTC 0x00
 checkResult
 
-# Add tests below
-
-test "Output turns to 0x0F"
-setPINA 0x00
+test "PINA: 0x01 => PORTC: 0x60"
+setPINA 0x01
 continue 2
-expectPORTB 0x0F
+expectPORTC 0x60
+checkResult
+
+test "PINA: 0x01 => PORTC: 0x60"
+setPINA 0x08
+continue 2
+expectPORTC 0x60
+checkResult
+
+test "PINA: 0x03 => PORTC: 0x70"
+setPINA 0x03
+continue 2
+expectPORTC 0x70
+checkResult
+
+test "PINA: 0x0A => PORTC: 0x3E"
+setPINA 0x0A
+continue 2
+expectPORTC 0x3E
+checkResult
+
+test "PINA: 0x0F => PORTC: 0x3F"
+setPINA 0x0F
+continue 2
+expectPORTC 0x3F
 checkResult
 
 # Report on how many tests passed/tests ran
