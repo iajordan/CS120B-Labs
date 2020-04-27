@@ -6,6 +6,8 @@
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
+ *
+ * VIDEO LINK: https://drive.google.com/open?id=15xux2M-GXi9GDb5MXQCiytXP04v5QeSc
  */
 
 #include <avr/io.h>
@@ -49,7 +51,7 @@ int main(void) {
       }
       else {
         gague = 0x00;
-        lowFuel = 0x00;
+        lowFuel = 0x40;
       }
       PORTC = (gague & 0x3F) | lowFuel ;
     }
