@@ -1,11 +1,13 @@
 /*	Author: sp4
- *  Partner(s) Name:
- *	Lab Section:
- *	Assignment: Lab #  Exercise #
+ *  Partner(s) Name:Ivannvoi Jordan ijord001@ucr.edu
+ *	Lab Section:28
+ *	Assignment: Lab 5  Exercise 1
  *	Exercise Description: [optional - include for your own benefit]
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
+ *
+ * VIDEO LINK: https://drive.google.com/open?id=15xux2M-GXi9GDb5MXQCiytXP04v5QeSc
  */
 
 #include <avr/io.h>
@@ -16,9 +18,9 @@
 int main(void) {
   DDRA = 0x00; PORTA = 0xFF;
   DDRC = 0xFF; PORTC = 0x00;
-  unsigned char gague = 0x00;
-  unsigned char lowFuel = 0x00;
-  unsigned char tmpA = 0x00;
+  unsigned char gague ;
+  unsigned char lowFuel ;
+  unsigned char tmpA ;
 
   while(1){
       tmpA = ~PINA & 0x0F;
@@ -49,9 +51,9 @@ int main(void) {
       }
       else {
         gague = 0x00;
-        lowFuel = 0x00;
+        lowFuel = 0x40;
       }
-      PORTC = (~gague & 0x3F) | lowFuel ;
+      PORTC = (gague & 0x3F) | lowFuel ;
     }
       return 1;
   }
