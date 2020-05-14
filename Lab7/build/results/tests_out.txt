@@ -1,0 +1,15 @@
+Breakpoint 1 at 0x6cc: file source/main.c, line 149.
+Note: automatically using hardware breakpoints for read-only addresses.
+
+Program received signal SIGTRAP, Trace/breakpoint trap.
+0x000003ca in __vector_13 () at source/main.c:53
+53	ISR(TIMER1_COMPA_vect) {
+======================================================
+Running all tests..."
+
+"PINA: 0x00, PINB: 0x00 => PORTC: 0"...
+Program received signal SIGTRAP, Trace/breakpoint trap.
+0x000003ca in __vector_13 () at source/main.c:53
+53	ISR(TIMER1_COMPA_vect) {
+======================================================
+Remote doesn't know how to detach
