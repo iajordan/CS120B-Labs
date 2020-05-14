@@ -1,18 +1,22 @@
 /*	Author: Ivannvoi Jordan - ijord001@ucr.edu
  *  Partner(s) Name:
  *	Lab Section: 28
- *	Assignment: Lab 6  Exercise 2
+ *	Assignment: Lab 6  Exercise 3
  *	Exercise Description: [optional - include for your own benefit]
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
+ *
+ *  VIDEO LINK DEMO: https://drive.google.com/open?id=1k4GwVifKcpqoTGHjV3_lrfDguK1qTvoB
+ *	VIDEO LINK AUTO GRADER: https://drive.google.com/open?id=11Bv_Rc4j12P__-m3Z6B8qtZMmERqcvmW
  */
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #ifdef _SIMULATE_
 #include "simAVRHeader.h"
 #endif
-enum States { START, INIT, LED1, LED2, LED3, WAIT} state;
+enum States { START, INIT, INC , DEC, CLEAR, DEC1, INC1} state;
+
 volatile unsigned char TimerFlag = 0;
 
 unsigned long _avr_timer_M = 1;
@@ -20,10 +24,12 @@ unsigned long _avr_timer_cntcurr = 0;
 
 unsigned char tmpA;
 unsigned char tmpB;
+
+unsigned char count;
 unsigned char press;
-unsigned char press2;
-unsigned char stay;
-unsigned char direction;
+
+unsigned char i;
+
 
 void TimerOn() {
 	TCCR1B = 0x0B;
@@ -55,135 +61,140 @@ void TimerSet(unsigned long M){
   _avr_timer_cntcurr = _avr_timer_M;
 }
 
+
 void TickSM(){
-	switch(state){
-		case START:
-		state = INIT;
-    direction = 0x00;
-		break;
-
-		case INIT:
-    tmpA = ~PINA & 0x01;
-    press = 0x00;
-    press2 = 0x00;
-    stay = 0x00;
-		state = LED1;
-    direction = 0x00;
-		break;
-
-		case LED1:
-    press = ~PINA &0x01;
-    if(press){
-      stay = 0x01;
-    }
-    if (press || stay){
-      state = WAIT;
-    }
-    else {
-      state = LED2;
-    }
-		break;
-
-    case LED2:
-    press = ~PINA &0x01;
-    if(press){
-      stay = 0x01;
-    }
-    if (press || stay){
-      state = WAIT;
-    }
-    else if (direction == 0x00){
-      state = LED3;
-    }
-    else {
-      state = LED1;
-    }
-    direction = ~direction & 0x01;
-    break;
-
-
-    case LED3:
-    press = ~PINA &0x01;
-    if(press){
-      stay = 0x01;
-    }
-    if (press || stay){
-      state = WAIT;
-    }
-    else{
-      state = LED2;
-    }
-    break;
-
-    case WAIT:
-    press = ~PINA &0x01;
-    if (stay && !press){
-      stay = 0x00;
-    }
-    else if(press && !stay){
-      state = INIT;
-      direction = 0x00;
-    }
-    else{
-      state = WAIT;
-    }
-
-    // if(~PINA & 0x01){
-    //   press2 = 0x01;
-    // }
-    // if (press2){
-    //   state = INIT;
-    //   direction = 0x00;
-    // }
-    // else{
-    //   state = WAIT;
-    // }
-		break;
-
-		default:
-		state = START;
-		break;
-
-	}
-
   switch(state){
     case START:
+    state = INIT;
+    count =0x07;
+		press = 0x00;
+		i = 0;
+    PORTB = count;
+    break;
+
+    case INIT:
+		tmpA = ~PINA & 0x03;
+    if (tmpA == 0x01){
+      state = INC;
+    }
+    else if (tmpA == 0x02){
+			if (count >= 7){
+				state =DEC;
+			}
+			else{
+				state = DEC1;
+			}
+    }
+    else if (tmpA == 0x03){
+      state = CLEAR;
+    }
+    else{
+			state = INIT;
+		}
+    break;
+
+		case DEC:
+		tmpA = ~PINA & 0x03;
+		if (tmpA){
+			press = 0x01;
+		}
+		if (i > 10){
+			if (press && tmpA && count > 7){
+				state = DEC;
+			}
+		}
+
+		if (press && !tmpA){
+			state = DEC1;
+		}
+		else{
+			state = INIT;
+		}
+		break;
+
+
+		case DEC1:
 		state = INIT;
-    direction = 0x00;
-		break;
-
-		case INIT:
-    tmpB = 0x01;
-    PORTB = tmpB;
-		state = LED1;
-		break;
-
-		case LED1:
-		tmpB = 0x01;
-    PORTB = tmpB;
 		break;
 
 
-    case LED2:
-    tmpB = 0x02;
-    PORTB = tmpB;
+		case INC:
+		tmpA = ~PINA & 0x03;
+		if (tmpA){
+			press = 0x01;
+		}
+		if (i > 10){
+			if (press && tmpA && count  < 9){
+				state = INC;
+			}
+			i++;
+		}
+
+		if (press && !tmpA){
+			state = INC1;
+		}
+		else{
+			state = INIT;
+		}
+		break;
+
+		case INC1:
+		state = INIT;
+		break;
+
+		case CLEAR:
+		state = INIT;
+		break;
+
+    default:
+    state = START;
     break;
+  }
 
-    case LED3:
-		tmpB = 0x04;
-    PORTB = tmpB;
-    break;
-
-    case WAIT:
-    // tmpB = 0x01;
-    // PORTB = tmpB;
+	switch(state){
+    case INIT:
+		PORTB = count;
 		break;
 
-		default:
+		case DEC:
+		if (count > 7){
+			count--;
+		}
+		PORTB = count;
 		break;
 
-	}
+		case DEC1:
+		if (count > 0){
+			count--;
+		}
+		press = 0x00;
+		PORTB = count;
+		break;
 
+		case INC1:
+		if (count < 9){
+			count++;
+		}
+		press = 0x00;
+		PORTB = count;
+		break;
+
+		case INC:
+		if (count < 9 ){
+			count++;
+		}
+		PORTB = count;
+		break;
+
+		case CLEAR:
+		count = 0;
+		PORTB = count;
+		break;
+
+    default:
+      state = START;
+      break;
+  }
 }
 
 
@@ -192,8 +203,9 @@ int main(void) {
   DDRB = 0xFF; PORTB = 0x00;
   state = START;
   tmpA = ~PINA;
+  count = 0x07;
 
-  TimerSet(50);
+  TimerSet(100);
   TimerOn();
 
   while (1) {

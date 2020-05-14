@@ -6,13 +6,16 @@
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
+ *
+ *  VIDEO LINK DEMO: https://drive.google.com/open?id=1k4GwVifKcpqoTGHjV3_lrfDguK1qTvoB
+ *	VIDEO LINK AUTO GRADER: https://drive.google.com/open?id=11Bv_Rc4j12P__-m3Z6B8qtZMmERqcvmW
  */
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #ifdef _SIMULATE_
 #include "simAVRHeader.h"
 #endif
-enum States { START, INIT, INC , DEC, CLEAR, WAIT} state;
+enum States { START, INIT, INC , DEC, CLEAR, DEC1, INC1} state;
 
 volatile unsigned char TimerFlag = 0;
 
@@ -22,14 +25,10 @@ unsigned long _avr_timer_cntcurr = 0;
 unsigned char tmpA;
 unsigned char tmpB;
 
-unsigned char count = 0x00;
+unsigned char count;
 unsigned char press;
-unsigned char press2;
-unsigned char stay;
-unsigned char direction;
-unsigned char once;
-unsigned char type;
 
+unsigned char i;
 
 
 void TimerOn() {
@@ -66,62 +65,131 @@ void TimerSet(unsigned long M){
 void TickSM(){
   switch(state){
     case START:
-      state = INIT;
-      count =0x07;
-      once = 0x00;
-      PORTB = count;
-      break;
+    state = INIT;
+    count =0x07;
+		press = 0x00;
+		i = 0;
+    PORTB = count;
+    break;
+
     case INIT:
-      tmpA = ~PINA & 0x03;
-      if (tmpA == 0x01){
-        type = 0x01;
-      }
-      else if (tmpA == 0x02){
-        type = 0x02;
-      }
-      else if (tmpA == 0x03){
-        type = 0x03;
-      }
-      if(type == 0x01){
-        tmpA = ~PINA;
-        if (count < 9 && once){
-          count++;
-          once = 0x00;
-        }
-        else if (count < 9 && (tmpA == 0x01 )){
-          count++;
-        }
-        else{
-          state = INIT;
-        }
-        PORTB = count;
-      }
-      else if (type == 0x02){
-        tmpA = ~PINA;
-        if (count > 7 && once){
-          count --;
-          once = 0x00;
-        }
-        else if (count > 7 && (tmpA == 0x02 )){
-          count--;
-        }
-        else{
-          state = INIT;
-        }
-        PORTB = count;
-      }
-      else if (type == 0x03){
-        tmpA = ~PINA;
-        if (tmpA == 0x03){
-          count = 0x00;
-        }
-        PORTB = count;
-        state =  INIT;
-      }
-      else{
-        state = INIT;
-      }
-      break;
+		tmpA = ~PINA & 0x03;
+    if (tmpA == 0x01){
+      state = INC;
+    }
+    else if (tmpA == 0x02){
+			if (count >= 7){
+				state =DEC;
+			}
+			else{
+				state = DEC1;
+			}
+    }
+    else if (tmpA == 0x03){
+      state = CLEAR;
+    }
+    else{
+			state = INIT;
+		}
+    break;
+
+		case DEC:
+		tmpA = ~PINA & 0x03;
+		if (tmpA){
+			press = 0x01;
+		}
+		if (i > 10){
+			if (press && tmpA && count > 7){
+				state = DEC;
+			}
+		}
+
+		if (press && !tmpA){
+			state = DEC1;
+		}
+		else{
+			state = INIT;
+		}
+		break;
+
+
+		case DEC1:
+		state = INIT;
+		break;
+
+
+		case INC:
+		tmpA = ~PINA & 0x03;
+		if (tmpA){
+			press = 0x01;
+		}
+		if (i > 10){
+			if (press && tmpA && count  < 9){
+				state = INC;
+			}
+			i++;
+		}
+
+		if (press && !tmpA){
+			state = INC1;
+		}
+		else{
+			state = INIT;
+		}
+		break;
+
+		case INC1:
+		state = INIT;
+		break;
+
+		case CLEAR:
+		state = INIT;
+		break;
+
+    default:
+    state = START;
+    break;
+  }
+
+	switch(state){
+    case INIT:
+		PORTB = count;
+		break;
+
+		case DEC:
+		if (count > 7){
+			count--;
+		}
+		PORTB = count;
+		break;
+
+		case DEC1:
+		if (count > 0){
+			count--;
+		}
+		press = 0x00;
+		PORTB = count;
+		break;
+
+		case INC1:
+		if (count < 9){
+			count++;
+		}
+		press = 0x00;
+		PORTB = count;
+		break;
+
+		case INC:
+		if (count < 9 ){
+			count++;
+		}
+		PORTB = count;
+		break;
+
+		case CLEAR:
+		count = 0;
+		PORTB = count;
+		break;
 
     default:
       state = START;
@@ -137,7 +205,7 @@ int main(void) {
   tmpA = ~PINA;
   count = 0x07;
 
-  TimerSet(50);
+  TimerSet(100);
   TimerOn();
 
   while (1) {

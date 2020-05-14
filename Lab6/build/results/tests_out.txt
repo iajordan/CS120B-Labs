@@ -1,38 +1,16 @@
-Breakpoint 1 at 0x3d4: file source/main.c, line 107.
+Breakpoint 1 at 0x5be: file source/main.c, line 181.
 Note: automatically using hardware breakpoints for read-only addresses.
-
-Program received signal SIGTRAP, Trace/breakpoint trap.
-0x000003cc in main () at source/main.c:103
-103	  TimerSet(1000);
 ======================================================
 Running all tests..."
 
-"PINB: 0x01"...
-Program received signal SIGTRAP, Trace/breakpoint trap.
-0x000003c6 in main () at source/main.c:103
-103	  TimerSet(1000);
-
-	Expected 0x01 
-	PORTB '0x800025:	0x04
 "PINB: 0x02"...
-Program received signal SIGTRAP, Trace/breakpoint trap.
-0x000003ca in main () at source/main.c:103
-103	  TimerSet(1000);
-
-Program received signal SIGTRAP, Trace/breakpoint trap.
-0x000003ca in main () at source/main.c:103
-103	  TimerSet(1000);
+	Expected 0x02 
+	PORTB '0x800025:	0x07
+"PINB: 0x01"...
+	Expected 0x01 
+	PORTB '0x800025:	0x07
 "PINB: 0x04"...
-Program received signal SIGTRAP, Trace/breakpoint trap.
-0x000003ca in main () at source/main.c:103
-103	  TimerSet(1000);
-
-Program received signal SIGTRAP, Trace/breakpoint trap.
-0x000003ca in main () at source/main.c:103
-103	  TimerSet(1000);
-
-Program received signal SIGTRAP, Trace/breakpoint trap.
-0x000003ca in main () at source/main.c:103
-103	  TimerSet(1000);
-======================================================
+	Expected 0x04 
+	PORTB '0x800025:	0x07
+"PINB: 0x01"...======================================================
 Remote doesn't know how to detach

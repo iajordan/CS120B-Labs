@@ -6,6 +6,9 @@
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
+ *
+ *  VIDEO LINK: https://drive.google.com/open?id=1DlG3BbOXMS9rRMweXY4IHwOxlEWlFASD
+ *
  */
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -18,12 +21,12 @@ volatile unsigned char TimerFlag = 0;
 unsigned long _avr_timer_M = 1;
 unsigned long _avr_timer_cntcurr = 0;
 
-unsigned char tmpA;
 unsigned char tmpB;
 unsigned char press;
 unsigned char press2;
 unsigned char stay;
 unsigned char direction;
+unsigned char i;
 
 void TimerOn() {
 	TCCR1B = 0x0B;
@@ -63,56 +66,81 @@ void TickSM(){
 		break;
 
 		case INIT:
-    tmpA = ~PINA & 0x01;
     press = 0x00;
     press2 = 0x00;
     stay = 0x00;
 		state = LED1;
     direction = 0x00;
+		i = 0;
 		break;
 
 		case LED1:
     press = ~PINA &0x01;
-    if(press){
+		if(!press && press2){
+			press2 = 0x00;
+			stay = 0x00;
+		}
+    if(press ){
       stay = 0x01;
     }
-    if (press || stay){
-      state = WAIT;
-    }
-    else {
-      state = LED2;
-    }
+		if ((press ||stay) && !press2){
+			state = WAIT;
+		}
+		else {
+			state = LED2;
+			i = 0;
+		}
 		break;
 
     case LED2:
     press = ~PINA &0x01;
+		if(!press && press2){
+			press2 = 0x00;
+			stay = 0x00;
+		}
     if(press){
       stay = 0x01;
     }
-    if (press || stay){
+
+    if ((press ||stay) && !press2){
       state = WAIT;
+			i = 0;
     }
-    else if (direction == 0x00){
-      state = LED3;
-    }
-    else {
-      state = LED1;
-    }
-    direction = ~direction & 0x01;
+		else{
+			if (direction == 0x00){
+	      state = LED3;
+				i = 0;
+	    }
+	    else if(direction == 0x01){
+	      state = LED1;
+				i = 0;
+	    }
+			direction = ~direction & 0x01;
+		}
+		i++;
+
     break;
 
 
     case LED3:
     press = ~PINA &0x01;
-    if(press){
+		if(!press && press2){
+			press2 = 0x00;
+			stay = 0x00;
+		}
+    if(press ){
       stay = 0x01;
     }
-    if (press || stay){
+
+    if ((press ||stay) && !press2){
       state = WAIT;
+			i=0;
     }
-    else{
-      state = LED2;
-    }
+		else{
+			state = LED2;
+			i = 0;
+		}
+		i++;
     break;
 
     case WAIT:
@@ -121,23 +149,14 @@ void TickSM(){
       stay = 0x00;
     }
     else if(press && !stay){
-      state = INIT;
+      state = LED1;
+			press2 = 0x01;
       direction = 0x00;
     }
     else{
       state = WAIT;
     }
 
-    // if(~PINA & 0x01){
-    //   press2 = 0x01;
-    // }
-    // if (press2){
-    //   state = INIT;
-    //   direction = 0x00;
-    // }
-    // else{
-    //   state = WAIT;
-    // }
 		break;
 
 		default:
@@ -175,8 +194,6 @@ void TickSM(){
     break;
 
     case WAIT:
-    // tmpB = 0x01;
-    // PORTB = tmpB;
 		break;
 
 		default:
@@ -190,15 +207,12 @@ void TickSM(){
 int main(void) {
   DDRA = 0x00; PORTA = 0xFF;
   DDRB = 0xFF; PORTB = 0x00;
-  state = START;
-  tmpA = ~PINA;
-
   TimerSet(300);
   TimerOn();
-
+	state = START;
   while (1) {
     TickSM();
-    while(!TimerFlag){}
+    while(!TimerFlag);
     TimerFlag = 0;
   }
 }

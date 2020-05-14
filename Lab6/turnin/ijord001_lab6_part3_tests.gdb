@@ -1,4 +1,4 @@
- # Test file for "Lab6"
+# Test file for "Lab6"
 
 
 # commands.gdb provides the following functions for ease:
@@ -42,30 +42,31 @@ end
 
 # Example test:
 
+test "PINB: 0x01"
+set state = START
+setPINA 0x01
+timeContinue
+expectPORTB 0x08
+
 test "PINB: 0x02"
 set state = START
-timeContinue 1
-expectPORTB 0x02
-
-test "PINB: 0x01"
-set state = START
 setPINA 0x03
-timeContinue 4
-expectPORTB 0x01
-
-test "PINB: 0x04"
-set state = START
-timeContinue 2
-setPINA 0x01
-continue
-expectPORTB 0x04
+timeContinue 1
+expectPORTB 0x00
 
 test "PINB: 0x01"
 set state = START
-timeContinue 12
-setPINA 0x01
-continue
+setPINA 0x02
+timeContinue 2
 expectPORTB 0x07
+
+test "PINB: 0x01"
+set state = START
+setPINA 0x02
+timeContinue
+setPINA 0x00
+timeContinue 2
+expectPORTB 0x06
 
 
 
