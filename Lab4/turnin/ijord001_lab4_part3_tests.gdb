@@ -72,6 +72,16 @@ continue 2
 expectPORTC 0x00
 checkResult
 
+test "Presses right code - PINA: 0x04, 0x00, 0x02 => PORTC: 0x01"
+set state = START
+setPINA 0x04
+continue 2
+setPINA 0x00
+continue 2
+setPINA 0x02
+continue 2
+expectPORTC 0x01
+checkResult
 
 # Report on how many tests passed/tests ran
 set $passed=$tests-$failed

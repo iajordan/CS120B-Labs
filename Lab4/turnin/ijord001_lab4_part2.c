@@ -58,7 +58,7 @@ void Tick(){
       break;
 
     case INC:
-      if (count < 9){
+      if (count < 8){
         count++;
       }
       PORTC = count;

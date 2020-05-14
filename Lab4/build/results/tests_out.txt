@@ -1,7 +1,16 @@
-Breakpoint 1 at 0x2b2: file source/main.c, line 86.
+Breakpoint 1 at 0x2b8: file source/main.c, line 87.
 Note: automatically using hardware breakpoints for read-only addresses.
 ======================================================
 Running all tests..."
 
-"Doesnt Press buttons - PINA: 0x00 => PORTC: 0x07"..."Presses the Increment button once - PINA: 0x01 => PORTC: 0x08"..."Presses the Increment button three times - PINA: 0x01 => PORTC: 0x09"..."Presses the Decrement button once - PINA: 0x02 => PORTC: 0x06"..."Presses the Decrement button 8 times - PINA: 0x02 => PORTC: 0x0"..."Presses the Decrement button once then Increment - PINA: 0x02 => PORTC: 0x07"..."Presses the Decrement and Increment - PINA: 0x02 => PORTC: 0x00"..."Presses wrong button - PINA: 0x04 => PORTC: 0x07"...======================================================
+"Doesnt Press buttons - PINA: 0x00 => PORTC: 0x07"..."Presses the Increment button once - PINA: 0x01 => PORTC: 0x08"...
+	Expected 0x08 
+	PORTC '0x800028:	0x07
+"Presses the Increment button three times - PINA: 0x01 => PORTC: 0x09"..."Presses the Decrement button once - PINA: 0x02 => PORTC: 0x06"...
+	Expected 0x06 
+	PORTC '0x800028:	0x07
+"Presses the Decrement button 8 times - PINA: 0x02 => PORTC: 0x0"..."Presses the Decrement button once then Increment - PINA: 0x02 => PORTC: 0x07"...
+	Expected 0x07 
+	PORTC '0x800028:	0x06
+"Presses the Decrement and Increment - PINA: 0x02 => PORTC: 0x00"..."Presses wrong button - PINA: 0x04 => PORTC: 0x07"...======================================================
 Remote doesn't know how to detach

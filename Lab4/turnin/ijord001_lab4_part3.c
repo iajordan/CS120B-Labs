@@ -1,4 +1,3 @@
-
 /*	Author: Ivannovi Jordan - ijord001@ucr.edu
  *  Partner(s) Name:
  *	Lab Section: 28
@@ -43,6 +42,9 @@ void Tick(){
       if(tmpA == 0x02 && previous == 0x04){
         state = UNLOCKED;
 
+      }
+      else if (!tmpA){
+        state = POUND;
       }
       else{
         state = LOCKED;

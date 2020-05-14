@@ -40,7 +40,8 @@ void Tick(){
       PORTB = tmpB;
       break;
     case RELEASE:
-      PORTB = tmpB;
+      tmpA = PINA;
+      PORTB = tmpB & 0x03;
       break;
     case PRESS:
       PORTB = (~tmpB & 0x03);

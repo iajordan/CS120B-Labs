@@ -47,17 +47,37 @@ void Tick(){
     case CHECK:
       for (int i = 0; i < 4; i++){
         if(code[i] == code_in[i]){
-          state = UNLOCKED;
+          if(status == 0x00){
+            state = UNLOCKED;
+          }
+          else{
+            status = LOCKED;
+          }
         }
         else {
-          state = LOCKED;
+          if (status == 0x00){
+            status = LOCKED;
+          }
+          else {
+            status = UNLOCKED;
+          }
         }
       }
+      count = 0x00;
       break;
 
     case UNLOCKED:
       tmpA = PINA;
-      state = UNLOCKED;
+      if(tmpA != 0){
+        code_in[count] = tmpA;
+        count += 1;
+      }
+      if (count == 0x03){
+        state = CHECK;
+      }
+      else{
+        state = UNLOCKED;
+      }
       break;
 
     default:

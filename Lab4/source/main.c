@@ -42,10 +42,16 @@ void Tick(){
       break;
     case INC:
       state = INIT;
+      if (count < 9){
+        count++;
+      }
       break;
 
     case DEC:
       state = INIT;
+      if (count > 0){
+        count--;
+      }
       break;
 
     default:
@@ -58,16 +64,11 @@ void Tick(){
       break;
 
     case INC:
-      if (count < 9){
-        count++;
-      }
       PORTC = count;
       break;
 
     case DEC:
-      if (count > 0){
-        count--;
-      }
+
       PORTC = count;
       break;
 
